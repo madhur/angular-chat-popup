@@ -101,6 +101,17 @@ ul.type_cmds .cmddesc {
     <div class="container">
         <div class="row" style="height:600px">
             <div class="col-md-12">
+            	<pre>Selectedcommand: {{selectedCommand}}</pre>
+            	<pre>focusIndex: {{focusIndex}}</pre>
+            	<pre>Level: {{level}}</pre>
+
+            	<span id="exec"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+            	
             </div>
         </div>
 
@@ -132,7 +143,7 @@ ul.type_cmds .cmddesc {
 
 <script type="text/ng-template" id="popupmenu.html">
 <div class="shortcut-menu">
-    <ul class="type_cmds" ng-show="level==1">
+    <ul class="type_cmds" ng-show="level==0">
     	<li class="header-command">
     	PRESS 'ENTER' TO ACT ON ANY COMMAND
     	</li>
@@ -142,21 +153,21 @@ ul.type_cmds .cmddesc {
             </div>
         </li>
     </ul>
-    <ul class="type_cmds" ng-show="level==2">
+    <ul class="type_cmds" ng-show="level==1">
     <li class="header-command">
     	PRESS 'ENTER' TO ACT ON ANY COMMAND
     	</li>
-        <li class="tab_complete_ui_item" ng-repeat="command in selcmd1.commands" ng-class="{'active': $index == focusIndex }">
+        <li class="tab_complete_ui_item" ng-repeat="command in commands1" ng-class="{'active': $index == focusIndex }">
 				<div class="cmd-left-td"><span class="cmdname">/{{command.text}}</span></div>
             		<div class="cmd-right-td"><span class="cmddesc"><span class="cmdtype"></span> {{command.desc}}</span>
             </div>
         </li>
     </ul>
-    <ul class="type_cmds" ng-show="level==3">
+    <ul class="type_cmds" ng-show="level==2">
     <li class="header-command">
     	PRESS 'ENTER' TO ACT ON ANY COMMAND
     	</li>
-        <li class="tab_complete_ui_item" ng-repeat="command in selcmd2.command.commands" ng-class="{'active': $index == focusIndex }">
+        <li class="tab_complete_ui_item" ng-repeat="command in commands2" ng-class="{'active': $index == focusIndex }">
 				<div class="cmd-left-td"><span class="cmdname">/{{command.text}}</span></div>
             		<div class="cmd-right-td"><span class="cmddesc"><span class="cmdtype"></span> {{command.desc}}</span>
             </div>

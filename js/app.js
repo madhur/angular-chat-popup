@@ -35,154 +35,281 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
 
             var popupHolder = $(elem).before(newElem);
 
+            var arrayCommands;
+
             var timer;
 
             bindKeys();
 
+            setupCanned(AppSettings.canned);
 
-            function bindKeys() {
-                $(elem).on('input', function() {
+            function setupCanned(hashData) {
+                if (!hashData.canned)
+                    return;
 
-                    clearTimeout(timer);
-                    var ms = 500; // milliseconds
-                    var val = this.value;
-                    timer = setTimeout(function() {
-                        setupPopup(val);
-                    }, ms);
-                });
+                var hashDL = hashData.canned.length;
+
+                var commands = [];
 
 
-            }
+                // var simplifiedHD = {};
 
+                for (var i = 0; i < hashDL; i++) {
 
-            function setupPopup() {
+                    var obj = getMacroCommandByShortCutId(hashData.canned[i].shortcutId);
 
-                var text = $(elem).text(); // get the current value of the input field.
+                    if (!obj.id) {
+                        obj.id = hashData.canned[i].shortcutId;
+                        obj.text = hashData.canned[i].shortcutText;
+                        obj.desc = "";
+                        obj.commands = [];
 
-                if (text == "/") {
-                    $log.debug("Setting up popup");
-
-                    load();
-
-                }
-            }
-
-            $scope.focusIndex = 0;
-
-            $scope.level = 1;
-
-            $scope.open = function(index) {
-                //var record = $scope.shownRecords[index]
-
-                for(var i=0;i<$scope.commands.length;++i)
-                {
-
-                    if($scope.commands[i].id==index)
-                    {
-                        if(AppSettings.menuActions[$scope.commands[i].id])
-                        {
-                            // command exists and is a leaf node
-
-                            break;
-                        }
-                        else if($scope.commands[i].commands && $scope.commands[i].commands.length > 0)
-                        {
-                            // not a leaf node, switch to level 2
-                            $scope.selcmd1 = $scope.commands[i];
-                            $scope.level = 2;
-                            $scope.focusIndex = 0;
-
-                            break;
-                        }
+                        AppSettings.popupMenu[0].commands.push(obj);
                     }
-                }
-            };
-
-            $scope.keys = [];
-            $scope.keys.push({
-                code: 13,
-                action: function() {
-                    $scope.open($scope.focusIndex);
-                }
-            });
-            $scope.keys.push({
-                code: 38,
-                action: function() {
-                    $scope.focusIndex--;
-                }
-            });
-            $scope.keys.push({
-                code: 40,
-                action: function() {
-                    $scope.focusIndex++;
-                }
-            });
-
-            $scope.keys.push({
-                code: 27,
-                action: function() {
-                    if ($scope.level == 1) {
-                        $('#popupholder').hide();
-                        $("#popupholder").off();
-                        elem.focus();
-                        $("#msgdiv").empty();
-                    } else if ($scope.level == 2) {
-                        // decrement level
-                        $scope.level--;
-
-
-                    } else if ($scope.level == 3) {
-
-                        $scope.level--;
-                    }
-
-                     $scope.focusIndex=0;
-
-                }
-            });
-
-
-
-            function load() {
-
-                var firstPopup = $templateCache.get('popupmenu.html');
-
-
-                $scope.commands = AppSettings.popupMenu;
-                // elem.html(firstPopup);
-
-                var linkFn = $compile(firstPopup);
-                var content = linkFn($scope);
-                $log.debug(content);
-
-                $timeout(function() {
-                    $('#popupholder').html(content);
-
-                    $('#popupholder').on('keydown', function(event) {
-
-                        var code = event.keyCode
-
-                        $scope.keys.forEach(function(o) {
-                            if (o.code !== code) {
-                                return;
-                            }
-
-                            event.preventDefault();
-                            o.action();
-                            $scope.$apply();
-                        });
+                    obj.commands.push({
+                        id: hashData.canned[i].responseId,
+                        text: hashData.canned[i].responseText,
+                        desc: "",
+                        action_type: 'share_macro'
                     });
 
-                    $('#popupholder').show();
-                    $('#popupholder').focus();
 
 
-                });
+                }
+
+                $log.debug("init");
+            }
 
 
 
+        function getMacroCommandByShortCutId(shortcutId) {
+
+
+            for (var i = 0; i < AppSettings.popupMenu[0].commands.length; ++i) {
+                if (AppSettings.popupMenu[0].commands[i].id == shortcutId)
+                    return AppSettings.popupMenu[0].commands[i];
+            }
+
+            return {};
+        }
+
+
+        function bindKeys() {
+            $(elem).on('input', function() {
+
+                clearTimeout(timer);
+                var ms = 500; // milliseconds
+                var val = this.value;
+                timer = setTimeout(function() {
+                    setupPopup(val);
+                }, ms);
+            });
+
+
+        }
+
+
+        function setupPopup() {
+
+            var text = $(elem).text(); // get the current value of the input field.
+
+            if (text == "/") {
+                $log.debug("Setting up popup");
+
+                load();
 
             }
         }
+
+        $scope.focusIndex = 0;
+
+        $scope.level = 0;
+
+        $scope.open = function(selectedCommand) {
+            //var record = $scope.shownRecords[index]
+            if (selectedCommand.action_type) {
+                // command exists and is a leaf node
+                
+                executeAction(selectedCommand);
+                
+
+            } else if (selectedCommand.commands && selectedCommand.commands.length > 0) {
+                // not a leaf node, switch to level 1
+                if($scope.level==0)
+                    $scope.commands1 = selectedCommand.commands;
+                else if($scope.level==1)
+                     $scope.commands2= selectedCommand.commands;
+
+
+                $scope.cmdArray.push(selectedCommand.commands);
+
+                $scope.level ++;
+                $scope.focusIndex = 0;
+
+            }
+        };
+
+        function executeAction(selectedCommand)
+        {
+            if(selectedCommand.action_type=='share_macro')
+            {
+                    // do name replacement and company
+                    destroyPopup(selectedCommand.text);
+            }
+            else 
+            {
+                    if(selectedCommand.action_type=='rate_card')
+                    {
+
+                    }
+                    else if(selectedCommand.action_type == 'upload_image')
+                    {
+
+                    }
+                    else if(selectedCommand.action_type == 'address_card')
+                    {
+
+                    }
+                    else if(selectedCommand.action_type=='share_whatsapp')
+                    {
+
+                    }
+                    else if(selectedCommand.action_type=='share_messenger')
+                    {
+                        
+                    }
+                    else if(selectedCommand.action_type=='share_facebook')
+                    {
+                        
+                    }
+                    else if(selectedCommand.action_type=='share_twitter')
+                    {
+                        
+                    }
+                    else if(selectedCommand.action_type=='share_gplus')
+                    {
+                        
+                    }
+                    destroyPopup(null);
+            }
+
+            $log.debug("Executing: " + selectedCommand.action_type);
+            $("#exec").text("Executed: " + selectedCommand.action_type);
+
+            
+        }
+
+        $scope.keys = [];
+
+        // Enter key
+        $scope.keys.push({
+            code: 13,
+            action: function() {
+                $scope.open($scope.selectedCommand);
+            }
+        });
+
+        // Up arrow
+        $scope.keys.push({
+            code: 38,
+            action: function() {
+
+                var commands;
+                commands = $scope.cmdArray[$scope.level];
+
+                $scope.focusIndex--;
+                $scope.selectedCommand = commands[$scope.focusIndex];
+            }
+        });
+
+        //Down arrow
+        $scope.keys.push({
+            code: 40,
+            action: function() {
+                var commands;
+
+                commands = $scope.cmdArray[$scope.level];
+
+                $scope.focusIndex++;
+
+                $scope.selectedCommand = commands[$scope.focusIndex];
+            }
+        });
+
+        // Escape key
+        $scope.keys.push({
+            code: 27,
+            action: function() {
+                if ($scope.level == 0) {
+
+                } else if ($scope.level == 1) {
+                    // decrement level
+                    $scope.level--;
+
+
+                } else if ($scope.level == 2) {
+
+                    $scope.level--;
+                }
+
+                $scope.focusIndex = 0;
+
+            }
+        });
+
+        function destroyPopup(text) {
+            $('#popupholder').hide();
+            $("#popupholder").off();
+            elem.focus();
+
+            if (text)
+                $("#msgdiv").text(text);
+        }
+
+
+        function load() {
+
+            var firstPopup = $templateCache.get('popupmenu.html');
+
+
+            $scope.commands = AppSettings.popupMenu;
+
+            $scope.cmdArray = [$scope.commands]
+
+            // elem.html(firstPopup);
+
+            var linkFn = $compile(firstPopup);
+            var content = linkFn($scope);
+            $log.debug(content);
+
+            $timeout(function() {
+                $('#popupholder').html(content);
+
+                $('#popupholder').on('keydown', function(event) {
+
+                    var code = event.keyCode
+
+                    $scope.keys.forEach(function(o) {
+                        if (o.code !== code) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        o.action();
+                        $scope.$apply();
+                    });
+                });
+
+                $('#popupholder').show();
+                $('#popupholder').focus();
+
+
+            });
+
+
+
+
+        }
     }
+}
 });

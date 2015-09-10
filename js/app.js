@@ -31,7 +31,7 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
         // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
         link: function($scope, elem, iAttrs, controller) {
 
-            var newElem = '<div id="popupholder"></div>';
+            var newElem = '<div id="popupholder" tabindex="0"></div>';
 
             var popupHolder = $(elem).before(newElem);
 
@@ -39,7 +39,6 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
 
             bindKeys();
 
-            $scope.level=1;
 
             function bindKeys() {
                 $(elem).on('input', function() {
@@ -70,9 +69,33 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
 
             $scope.focusIndex = 0;
 
+            $scope.level = 1;
+
             $scope.open = function(index) {
                 //var record = $scope.shownRecords[index]
-                console.log('opening : ', record);
+
+                for(var i=0;i<$scope.commands.length;++i)
+                {
+
+                    if($scope.commands[i].id==index)
+                    {
+                        if(AppSettings.menuActions[$scope.commands[i].id])
+                        {
+                            // command exists and is a leaf node
+
+                            break;
+                        }
+                        else if($scope.commands[i].commands && $scope.commands[i].commands.length > 0)
+                        {
+                            // not a leaf node, switch to level 2
+                            $scope.selcmd1 = $scope.commands[i];
+                            $scope.level = 2;
+                            $scope.focusIndex = 0;
+
+                            break;
+                        }
+                    }
+                }
             };
 
             $scope.keys = [];
@@ -95,16 +118,29 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
                 }
             });
 
-            $scope.$on('keydown', function(msg, obj) {
-                var code = obj.code;
-                $scope.keys.forEach(function(o) {
-                    if (o.code !== code) {
-                        return;
+            $scope.keys.push({
+                code: 27,
+                action: function() {
+                    if ($scope.level == 1) {
+                        $('#popupholder').hide();
+                        $("#popupholder").off();
+                        elem.focus();
+                        $("#msgdiv").empty();
+                    } else if ($scope.level == 2) {
+                        // decrement level
+                        $scope.level--;
+
+
+                    } else if ($scope.level == 3) {
+
+                        $scope.level--;
                     }
-                    o.action();
-                    $scope.$apply();
-                });
+
+                     $scope.focusIndex=0;
+
+                }
             });
+
 
 
             function load() {
@@ -121,7 +157,28 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
 
                 $timeout(function() {
                     $('#popupholder').html(content);
+
+                    $('#popupholder').on('keydown', function(event) {
+
+                        var code = event.keyCode
+
+                        $scope.keys.forEach(function(o) {
+                            if (o.code !== code) {
+                                return;
+                            }
+
+                            event.preventDefault();
+                            o.action();
+                            $scope.$apply();
+                        });
+                    });
+
+                    $('#popupholder').show();
+                    $('#popupholder').focus();
+
+
                 });
+
 
 
 

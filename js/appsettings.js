@@ -22,132 +22,96 @@ chatApp.factory('AppSettings', function() {
 
     var hostName = "https://www.akosha.com";
 
+    var menuActions = 
+    {
+    	1: "upload_image",
+    	2: "redirect_chat",
+    	3: "rate_card",
+    	5: "address_card"
+    }
+
     var popupMenu =
 
         [{
-                id: 1,
+                id: 0,
                 text: "Macros",
                 desc: "Includes greetings, apologies, goodbyes",
-                action_type: "share_macro",
                 commands:[]
 
+            },
+
+            {
+                id: 1,
+                text: "Upload image",
+                desc: "Allows to select an image to upload",
             },
 
             {
                 id: 2,
-                text: "Upload image",
-                desc: "Allows to select an image to upload",
-                action_type: "upload_image",
-                commands:[]
+                text: "Redirect",
+                desc: "Redirect user to a different channel",
             },
+
 
             {
                 id: 3,
-                text: "Redirect",
-                desc: "Redirect user to a different channel",
-                action_type: "redirect_chat",
-                commands:[]
+                text: "Rate card",
+                desc: "Send a rate card to the user",
             },
-
 
             {
                 id: 4,
-                text: "Rate card",
-                desc: "Send a rate card to the user",
-                action_type: "rate_card",
-                commands:[]
-            },
-
-            {
-                id: 5,
                 text: "Share card",
                 desc: "Send a share card to the user",
-                action_type: "share_card",
-
                 commands: [
 
                 	 {
-		                id: 1,
-		                text: "Share Request WhatsApp",
-		                desc: "Allows to select an image to upload",
+		                id: 6,
+		                text: "WhatsApp",
+		                desc: "Share Request",
 		                action_type: "share_whatsapp",
-		                shareLink: shareLink + "http://bit.ly/AkoshaW"
             		},
 
             		{
-		                id: 1,
-		                text: "Share Request WhatsApp",
-		                desc: "Allows to select an image to upload",
+		               id: 7,
+		                text: "Facebook",
+		                desc: "Share Request",
 		                action_type: "share_whatsapp",
-		                shareLink: shareLink + "http://bit.ly/AkoshaW"
             		},
 
+            		{
+		                id: 8,
+		                text: "Facebook Messenger",
+		                desc: "Share Request",
+		                action_type: "share_messenger",
+            		},
 
+            		{
+		                id: 9,
+		                text: "Twitter",
+		                desc: "Share Request",
+		                action_type: "share_twitter",
+            		},
 
-
+            		{
+		                id: 10,
+		                text: "Google Plus",
+		                desc: "Share Request",
+		                action_type: "share_gplus",
+            		}
 
                 ]
             },
 
             {
-                id: 6,
+                id: 5,
                 text: "Address card",
                 desc: "Send a address card to the user",
-                action_type: "share_address_card",
-                commands:[]
             },
 
         ];
 
-    var shareTypes = {
-        whatsapp: {
-            actionText: shareText,
-            actionName: "com.whatsapp",
-            shareLink: shareLink + "http://bit.ly/AkoshaW"
-        },
-
-        facebook: {
-            actionText: shareText,
-            actionName: "com.facebook.katana",
-            shareLink: shareLink + "http://bit.ly/AkoshaFB"
-        },
-        fbmess: {
-            actionText: shareText,
-            actionName: "com.facebook.orca",
-            shareLink: shareLink + "http://bit.ly/AkoshaM"
-        },
-
-        twitter: {
-            actionText: shareText,
-            actionName: "com.twitter.android",
-            shareLink: twitterShareLink
-
-        },
-        gplus: {
-            actionText: shareText,
-            actionName: "com.google.android.apps.plus",
-            shareLink: shareLink + "http://bit.ly/AkoshaGP"
-
-        },
-
-        rate: {
-            actionText: rateText,
-            actionName: "com.akosha.directtalk"
-        },
-
-        rate_session: {
-
-        },
-
-        redirect: {
-            companyId: 1,
-            actionText: "Redirecting you to this session"
-
-        }
-
-
-    };
-
+   
 
 
 
@@ -168,7 +132,7 @@ chatApp.factory('AppSettings', function() {
         hostName: hostName,
 
         popupMenu: popupMenu,
-        shareTypes: shareTypes
+        menuActions:menuActions
     };
 
 

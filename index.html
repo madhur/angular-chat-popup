@@ -90,6 +90,7 @@ ul.type_cmds .cmddesc {
 	    border-style: solid;
     border-width: 1px;
     border-color: #A9A9A9;
+    outline: 0px solid transparent;
 
 }
 
@@ -107,7 +108,7 @@ ul.type_cmds .cmddesc {
             <div class="col-md-12">
 
 					
-                <div contenteditable="true" style="border-width:1px; border-style: solid" keyboard-shortcut>
+                <div contenteditable="true" style="border-width:1px; border-style: solid" id="msgdiv" keyboard-shortcut>
                 </div>
             </div>
         </div>
@@ -142,14 +143,20 @@ ul.type_cmds .cmddesc {
         </li>
     </ul>
     <ul class="type_cmds" ng-show="level==2">
-        <li class="tab_complete_ui_item" ng-repeat="command in command.commands" ng-class="{'active': $index == focusIndex }">
+    <li class="header-command">
+    	PRESS 'ENTER' TO ACT ON ANY COMMAND
+    	</li>
+        <li class="tab_complete_ui_item" ng-repeat="command in selcmd1.commands" ng-class="{'active': $index == focusIndex }">
 				<div class="cmd-left-td"><span class="cmdname">/{{command.text}}</span></div>
             		<div class="cmd-right-td"><span class="cmddesc"><span class="cmdtype"></span> {{command.desc}}</span>
             </div>
         </li>
     </ul>
     <ul class="type_cmds" ng-show="level==3">
-        <li class="tab_complete_ui_item" ng-repeat="command in command.command.commands" ng-class="{'active': $index == focusIndex }">
+    <li class="header-command">
+    	PRESS 'ENTER' TO ACT ON ANY COMMAND
+    	</li>
+        <li class="tab_complete_ui_item" ng-repeat="command in selcmd2.command.commands" ng-class="{'active': $index == focusIndex }">
 				<div class="cmd-left-td"><span class="cmdname">/{{command.text}}</span></div>
             		<div class="cmd-right-td"><span class="cmddesc"><span class="cmdtype"></span> {{command.desc}}</span>
             </div>

@@ -2,24 +2,148 @@
 <html ng-app="chatApp">
 
 <head>
-<script type="text/javascript" src="lib/angular.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/stylesheet" rel="stylesheet" href="css/bootstrap.min.css" />
+    <link type="text/stylesheet" rel="stylesheet" href="css/bootstrap-theme.min.css" />
+    <style>
+	.type_cmds
+	{
+		list-style-type: none;
+		margin: 0;
+		padding:0;
+	}
+
+	li.tab_complete_ui_item {
+    border: 0;
+  
+    background: 0 0;
+    padding: 3px 10px 2px;
+    font-size: 12px;
+    border-bottom: 1px solid #fff;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    border-bottom-style: dotted;
+    border-width: 1px;
+    border-color: #808080;
+    height:40px;
+}
+
+li.header-command
+{
+border: 0;
+  
+    background: 0 0;
+    padding: 3px 10px 2px;
+    font-size: 12px;
+    
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    height:40px;
+    padding-top:15px;
+    color:lightgray;
+
+}
+
+li.active {
+   background-color:#F2F2F2;
+}
+
+.cmdname
+{
+	font-weight: 900;
+}
+
+li .cmd-left-td {
+    display: table-cell;
+    white-space: nowrap;
+    padding-right: 15px;
+    padding-top:10px;
+}
+
+li .cmd-right-td {
+    display: table-cell;
+    text-align: right;
+    padding-right: 15px;
+     padding-top:10px;
+}
+
+ul.type_cmds .cmddesc {
+    font-weight: 300;
+}
+
+#popupholder
+{
+	    border-style: solid;
+    border-width: 1px;
+    border-color: #A9A9A9;
+
+}
+
+    </style>
 </head>
 
-
 <body ng-controller="chatController">
+    <div class="container">
+        <div class="row" style="height:600px">
+            <div class="col-md-12">
+            </div>
+        </div>
 
-<div contenteditable="true">
+        <div class="row">
+            <div class="col-md-12">
 
-</div>
+					
+                <div contenteditable="true" style="border-width:1px; border-style: solid" keyboard-shortcut>
+                </div>
+            </div>
+        </div>
 
 
-<!-- <script type="text/javascript" src="lib/angular-animate.min.js"></script>
+    </div>
+     <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/angular.min.js"></script>
+
+    <!-- <script type="text/javascript" src="lib/angular-animate.min.js"></script>
 <script type="text/javascript" src="lib/angular-route.min.js"></script>
 <script type="text/javascript" src="lib/angular-sanitize.js"></script> -->
-
-<script type="text/javascript" src="js/app.js"></script>
-<script type="text/javascript" src="js/chatcontroller.js"></script>
-<script type="text/javascript" src="js/data.js"></script>
+    <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+      <script type="text/javascript" src="js/appsettings.js"></script>
+    <script type="text/javascript" src="js/chatcontroller.js"></script>
+    <script type="text/javascript" src="js/data.js"></script>
 </body>
 
 </html>
+
+<script type="text/ng-template" id="popupmenu.html">
+<div class="shortcut-menu">
+    <ul class="type_cmds" ng-show="level==1">
+    	<li class="header-command">
+    	PRESS 'ENTER' TO ACT ON ANY COMMAND
+    	</li>
+        <li class="tab_complete_ui_item" ng-repeat="command in commands" ng-class="{'active': $index == focusIndex }">
+				<div class="cmd-left-td"><span class="cmdname">/{{command.text}}</span></div>
+            		<div class="cmd-right-td"><span class="cmddesc"><span class="cmdtype"></span> {{command.desc}}</span>
+            </div>
+        </li>
+    </ul>
+    <ul class="type_cmds" ng-show="level==2">
+        <li class="tab_complete_ui_item" ng-repeat="command in command.commands" ng-class="{'active': $index == focusIndex }">
+				<div class="cmd-left-td"><span class="cmdname">/{{command.text}}</span></div>
+            		<div class="cmd-right-td"><span class="cmddesc"><span class="cmdtype"></span> {{command.desc}}</span>
+            </div>
+        </li>
+    </ul>
+    <ul class="type_cmds" ng-show="level==3">
+        <li class="tab_complete_ui_item" ng-repeat="command in command.command.commands" ng-class="{'active': $index == focusIndex }">
+				<div class="cmd-left-td"><span class="cmdname">/{{command.text}}</span></div>
+            		<div class="cmd-right-td"><span class="cmddesc"><span class="cmdtype"></span> {{command.desc}}</span>
+            </div>
+        </li>
+    </ul>
+</div>
+</script>

@@ -1,52 +1,3 @@
-{
-    menu: [{
-            id: 1,
-            text: "Macros",
-            desc: "Includes greetings, apologies, goodbyes",
-            action_type: "share_macro"
-        },
-
-        {
-            id: 2,
-            text: "Upload image",
-            desc: "Allows to select an image to upload",
-            action_type: "upload_image"
-        },
-
-        {
-            id: 3,
-            text: "Redirect",
-            desc: "Redirect user to a different channel",
-            action_type: "redirect_chat"
-        },
-
-
-        {
-            id: 4,
-            text: "Rate card",
-            desc: "Send a rate card to the user",
-            action_type: "rate_card"
-        },
-
-        {
-            id: 5,
-            text: "Share card",
-            desc: "Send a share card to the user",
-            action_type: "share_card"
-        },
-
-        {
-            id: 6,
-            text: "Address card",
-            desc: "Send a address card to the user",
-            action_type: "share_address_card"
-        },
-
-
-    ]
-
-
-}
 
 
 var  canned=
@@ -141,54 +92,6 @@ var rateText = "I hope your query has been resolved. Do you think this deserves 
 var shareLink = "Hi! Found this really useful app. It lets you chat directly with businesses. You can get help with things like finding deals, ordering cabs or food, checking into flights, finding best mobile plans and many more things. Try it now ";
 var twitterShareLink = "Found this really useful app. It lets you chat directly with businesses. Makes life a hell lot easier. Try it now http://bit.ly/AkoshaT";
 
-var shareType = {
-    whatsapp: {
-        actionText: shareText,
-        actionName: "com.whatsapp",
-        shareLink: shareLink + "http://bit.ly/AkoshaW"
-    },
-
-    facebook: {
-        actionText: shareText,
-        actionName: "com.facebook.katana",
-        shareLink: shareLink + "http://bit.ly/AkoshaFB"
-    },
-    fbmess: {
-        actionText: shareText,
-        actionName: "com.facebook.orca",
-        shareLink: shareLink + "http://bit.ly/AkoshaM"
-    },
-
-    twitter: {
-        actionText: shareText,
-        actionName: "com.twitter.android",
-        shareLink: twitterShareLink
-
-    },
-    gplus: {
-        actionText: shareText,
-        actionName: "com.google.android.apps.plus",
-        shareLink: shareLink + "http://bit.ly/AkoshaGP"
-
-    },
-
-    rate: {
-        actionText: rateText,
-        actionName: "com.akosha.directtalk"
-    },
-
-    rate_session: {
-
-    },
-
-    redirect: {
-        companyId: 1,
-        actionText: "Redirecting you to this session"
-
-    }
-
-
-};
 
 
 var companies = 

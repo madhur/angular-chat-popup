@@ -88,6 +88,8 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
 
 
             function bindKeys() {
+                $log.debug("binding keys");
+
                 $(elem).on('input', function() {
 
                     clearTimeout(timer);
@@ -103,11 +105,14 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
 
 
             function setupPopup() {
+                $log.debug("Setting up popup");
 
                 var text = $(elem).text(); // get the current value of the input field.
+                
+                $log.debug(text);
 
-                if (text == "/") {
-                    $log.debug("Setting up popup");
+                if (text.trim() == "/") {
+                    
 
                     load();
 
@@ -256,8 +261,11 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
                 else
                     $("#msgdiv").empty();
 
+                // reset all vars
+                
                 $scope.focusIndex = 0;
                 $scope.level = 0;
+                $scope.selectedCommand = {};
 
             }
 

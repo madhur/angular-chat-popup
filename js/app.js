@@ -17,18 +17,11 @@ chatApp
 chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $compile, AppSettings, $timeout) {
     // Runs during compile
     return {
-        // name: '',
-        // priority: 1,
-        // terminal: true,
         // scope: {}, // {} = isolate, true = child, false/undefined = no change
-        // controller: function($scope, $element, $attrs, $transclude) {},
-        // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
         restrict: 'EA', // E = Element, A = Attribute, C = Class, M = Comment
         // template: '',
         // templateUrl: '',
         replace: false,
-        // transclude: true,
-        // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
         link: function($scope, elem, iAttrs, controller) {
 
             var newElem = '<div id="popupholder" tabindex="0"></div>';
@@ -82,234 +75,233 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
 
 
 
-        function getMacroCommandByShortCutId(shortcutId) {
+            function getMacroCommandByShortCutId(shortcutId) {
 
 
-            for (var i = 0; i < AppSettings.popupMenu[0].commands.length; ++i) {
-                if (AppSettings.popupMenu[0].commands[i].id == shortcutId)
-                    return AppSettings.popupMenu[0].commands[i];
-            }
-
-            return {};
-        }
-
-
-        function bindKeys() {
-            $(elem).on('input', function() {
-
-                clearTimeout(timer);
-                var ms = 500; // milliseconds
-                var val = this.value;
-                timer = setTimeout(function() {
-                    setupPopup(val);
-                }, ms);
-            });
-
-
-        }
-
-
-        function setupPopup() {
-
-            var text = $(elem).text(); // get the current value of the input field.
-
-            if (text == "/") {
-                $log.debug("Setting up popup");
-
-                load();
-
-            }
-        }
-
-        $scope.focusIndex = 0;
-
-        $scope.level = 0;
-
-        $scope.open = function(selectedCommand) {
-            //var record = $scope.shownRecords[index]
-            if (selectedCommand.action_type) {
-                // command exists and is a leaf node
-                
-                executeAction(selectedCommand);
-                
-
-            } else if (selectedCommand.commands && selectedCommand.commands.length > 0) {
-                // not a leaf node, switch to level 1
-                if($scope.level==0)
-                    $scope.commands1 = selectedCommand.commands;
-                else if($scope.level==1)
-                     $scope.commands2= selectedCommand.commands;
-
-
-                $scope.cmdArray.push(selectedCommand.commands);
-
-                $scope.level ++;
-                $scope.focusIndex = 0;
-
-            }
-        };
-
-        function executeAction(selectedCommand)
-        {
-            if(selectedCommand.action_type=='share_macro')
-            {
-                    // do name replacement and company
-                    destroyPopup(selectedCommand.text);
-            }
-            else 
-            {
-                    if(selectedCommand.action_type=='rate_card')
-                    {
-
-                    }
-                    else if(selectedCommand.action_type == 'upload_image')
-                    {
-
-                    }
-                    else if(selectedCommand.action_type == 'address_card')
-                    {
-
-                    }
-                    else if(selectedCommand.action_type=='share_whatsapp')
-                    {
-
-                    }
-                    else if(selectedCommand.action_type=='share_messenger')
-                    {
-                        
-                    }
-                    else if(selectedCommand.action_type=='share_facebook')
-                    {
-                        
-                    }
-                    else if(selectedCommand.action_type=='share_twitter')
-                    {
-                        
-                    }
-                    else if(selectedCommand.action_type=='share_gplus')
-                    {
-                        
-                    }
-                    destroyPopup(null);
-            }
-
-            $log.debug("Executing: " + selectedCommand.action_type);
-            $("#exec").text("Executed: " + selectedCommand.action_type);
-
-            
-        }
-
-        $scope.keys = [];
-
-        // Enter key
-        $scope.keys.push({
-            code: 13,
-            action: function() {
-                $scope.open($scope.selectedCommand);
-            }
-        });
-
-        // Up arrow
-        $scope.keys.push({
-            code: 38,
-            action: function() {
-
-                var commands;
-                commands = $scope.cmdArray[$scope.level];
-
-                $scope.focusIndex--;
-                $scope.selectedCommand = commands[$scope.focusIndex];
-            }
-        });
-
-        //Down arrow
-        $scope.keys.push({
-            code: 40,
-            action: function() {
-                var commands;
-
-                commands = $scope.cmdArray[$scope.level];
-
-                $scope.focusIndex++;
-
-                $scope.selectedCommand = commands[$scope.focusIndex];
-            }
-        });
-
-        // Escape key
-        $scope.keys.push({
-            code: 27,
-            action: function() {
-                if ($scope.level == 0) {
-
-                } else if ($scope.level == 1) {
-                    // decrement level
-                    $scope.level--;
-
-
-                } else if ($scope.level == 2) {
-
-                    $scope.level--;
+                for (var i = 0; i < AppSettings.popupMenu[0].commands.length; ++i) {
+                    if (AppSettings.popupMenu[0].commands[i].id == shortcutId)
+                        return AppSettings.popupMenu[0].commands[i];
                 }
 
-                $scope.focusIndex = 0;
-
+                return {};
             }
-        });
-
-        function destroyPopup(text) {
-            $('#popupholder').hide();
-            $("#popupholder").off();
-            elem.focus();
-
-            if (text)
-                $("#msgdiv").text(text);
-        }
 
 
-        function load() {
+            function bindKeys() {
+                $(elem).on('input', function() {
 
-            var firstPopup = $templateCache.get('popupmenu.html');
-
-
-            $scope.commands = AppSettings.popupMenu;
-
-            $scope.cmdArray = [$scope.commands]
-
-            // elem.html(firstPopup);
-
-            var linkFn = $compile(firstPopup);
-            var content = linkFn($scope);
-            $log.debug(content);
-
-            $timeout(function() {
-                $('#popupholder').html(content);
-
-                $('#popupholder').on('keydown', function(event) {
-
-                    var code = event.keyCode
-
-                    $scope.keys.forEach(function(o) {
-                        if (o.code !== code) {
-                            return;
-                        }
-
-                        event.preventDefault();
-                        o.action();
-                        $scope.$apply();
-                    });
+                    clearTimeout(timer);
+                    var ms = 500; // milliseconds
+                    var val = this.value;
+                    timer = setTimeout(function() {
+                        setupPopup(val);
+                    }, ms);
                 });
 
-                $('#popupholder').show();
-                $('#popupholder').focus();
+
+            }
 
 
+            function setupPopup() {
+
+                var text = $(elem).text(); // get the current value of the input field.
+
+                if (text == "/") {
+                    $log.debug("Setting up popup");
+
+                    load();
+
+                }
+            }
+
+            $scope.focusIndex = 0;
+
+            $scope.level = 0;
+
+            $scope.open = function(selectedCommand) {
+                //var record = $scope.shownRecords[index]
+                if (selectedCommand.action_type) {
+                    // command exists and is a leaf node
+
+                    executeAction(selectedCommand);
+
+
+                } else if (selectedCommand.commands && selectedCommand.commands.length > 0) {
+                    // not a leaf node, switch to level 1
+                    if ($scope.level == 0)
+                        $scope.commands1 = selectedCommand.commands;
+                    else if ($scope.level == 1)
+                        $scope.commands2 = selectedCommand.commands;
+
+
+                    $scope.cmdArray.push(selectedCommand.commands);
+
+                    $scope.level++;
+                    $scope.focusIndex = 0;
+
+                    $scope.selectedCommand = selectedCommand.commands[0];
+
+                }
+            };
+
+            function executeAction(selectedCommand) {
+                if (selectedCommand.action_type == 'share_macro') {
+                    // do name replacement and company
+                    destroyPopup(selectedCommand.text);
+                } else {
+                    if (selectedCommand.action_type == 'rate_card') {
+
+                    } else if (selectedCommand.action_type == 'upload_image') {
+
+                    } else if (selectedCommand.action_type == 'address_card') {
+
+                    } else if (selectedCommand.action_type == 'share_whatsapp') {
+
+                    } else if (selectedCommand.action_type == 'share_messenger') {
+
+                    } else if (selectedCommand.action_type == 'share_facebook') {
+
+                    } else if (selectedCommand.action_type == 'share_twitter') {
+
+                    } else if (selectedCommand.action_type == 'share_gplus') {
+
+                    }
+                    destroyPopup(null);
+                }
+
+                $log.debug("Executing: " + selectedCommand.action_type);
+                $("#exec").text("Executed: " + selectedCommand.action_type);
+
+
+            }
+
+            $scope.keys = [];
+
+            // Enter key
+            $scope.keys.push({
+                code: [13 /*enter*/ , 39 /*right*/ ],
+                action: function() {
+                    $scope.open($scope.selectedCommand);
+                }
             });
 
+            // Up arrow
+            $scope.keys.push({
+                code: [38],
+                action: function() {
+
+                    var commands;
+                    commands = $scope.cmdArray[$scope.level];
+
+                    if ($scope.focusIndex > 0) {
+                        $scope.focusIndex--;
+                        $scope.selectedCommand = commands[$scope.focusIndex];
+                    }
+                }
+            });
+
+            //Down arrow
+            $scope.keys.push({
+                code: [40],
+                action: function() {
+                    var commands;
+
+                    commands = $scope.cmdArray[$scope.level];
+
+                    if ($scope.focusIndex < commands.length - 1) {
+                        $scope.focusIndex++;
+
+                        $scope.selectedCommand = commands[$scope.focusIndex];
+                    }
+                }
+            });
+
+            //left key
+            $scope.keys.push({
+                code: [37],
+                action: function() {
+                    if ($scope.level == 0) {
+
+                    } else if ($scope.level == 1) {
+                        // decrement level
+                        $scope.level--;
 
 
+                    } else if ($scope.level == 2) {
 
+                        $scope.level--;
+                    }
+
+                    $scope.focusIndex = 0;
+
+                }
+            });
+
+            // Escape key
+            $scope.keys.push({
+                code: [27],
+                action: function() {
+
+                    destroyPopup();
+                }
+            });
+
+            function destroyPopup(text) {
+                $('#popupholder').hide();
+                $("#popupholder").off();
+                elem.focus();
+
+                if (text)
+                    $("#msgdiv").text(text);
+                else
+                    $("#msgdiv").empty();
+
+                $scope.focusIndex = 0;
+                $scope.level = 0;
+
+            }
+
+
+            function load() {
+
+                var firstPopup = $templateCache.get('popupmenu.html');
+
+                $scope.commands = AppSettings.popupMenu;
+
+                // First command is defualt selected command
+                $scope.selectedCommand = $scope.commands[0];
+
+                $scope.cmdArray = [$scope.commands]
+
+                var linkFn = $compile(firstPopup);
+                var content = linkFn($scope);
+                $log.debug(content);
+
+                $timeout(function() {
+                    $('#popupholder').html(content);
+
+                    $('#popupholder').on('keydown', function(event) {
+
+                        var code = event.keyCode
+
+                        $scope.keys.forEach(function(o) {
+                            if ($.inArray(code, o.code) == -1) {
+                                return;
+                            }
+
+                            event.preventDefault();
+                            o.action();
+                            $scope.$apply();
+                        });
+                    });
+
+                    $('#popupholder').show();
+                    $('#popupholder').focus();
+
+
+                });
+
+            }
         }
     }
-}
 });

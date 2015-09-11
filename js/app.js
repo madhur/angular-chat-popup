@@ -22,11 +22,11 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
         // template: '',
         // templateUrl: '',
         replace: false,
-        link: function($scope, elem, iAttrs, controller) {
+        link: function($scope, element, iAttrs, controller) {
 
             var newElem = '<div id="popupholder" tabindex="0"></div>';
 
-            var popupHolder = $(elem).before(newElem);
+            var popupHolder = $(element).before(newElem);
 
             var arrayCommands;
 
@@ -90,7 +90,7 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
             function bindKeys() {
                 $log.debug("binding keys");
 
-                $(elem).on('input', function() {
+                $(element).on('input', function() {
 
                     clearTimeout(timer);
                     var ms = 500; // milliseconds
@@ -107,7 +107,7 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
             function setupPopup() {
                 $log.debug("Setting up popup");
 
-                var text = $(elem).text(); // get the current value of the input field.
+                var text = $(element).text(); // get the current value of the input field.
                 
                 $log.debug(text);
 
@@ -262,7 +262,7 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
                     $("#msgdiv").empty();
 
                 // reset all vars
-                
+
                 $scope.focusIndex = 0;
                 $scope.level = 0;
                 $scope.selectedCommand = {};

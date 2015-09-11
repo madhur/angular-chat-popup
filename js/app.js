@@ -254,7 +254,7 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
             function destroyPopup(text) {
                 $('#popupholder').hide();
                 $("#popupholder").off();
-                elem.focus();
+                element.focus();
 
                 if (text)
                     $("#msgdiv").text(text);

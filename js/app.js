@@ -108,11 +108,11 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
                 $log.debug("Setting up popup");
 
                 var text = $(element).text(); // get the current value of the input field.
-                
+
                 $log.debug(text);
 
                 if (text.trim() == "/") {
-                    
+
 
                     load();
 
@@ -124,29 +124,7 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
             $scope.level = 0;
 
             $scope.open = function(selectedCommand) {
-                //var record = $scope.shownRecords[index]
-                if (selectedCommand.action_type) {
-                    // command exists and is a leaf node
-
-                    executeAction(selectedCommand);
-
-
-                } else if (selectedCommand.commands && selectedCommand.commands.length > 0) {
-                    // not a leaf node, switch to level 1
-                    if ($scope.level == 0)
-                        $scope.commands1 = selectedCommand.commands;
-                    else if ($scope.level == 1)
-                        $scope.commands2 = selectedCommand.commands;
-
-
-                    $scope.cmdArray.push(selectedCommand.commands);
-
-                    $scope.level++;
-                    $scope.focusIndex = 0;
-
-                    $scope.selectedCommand = selectedCommand.commands[0];
-
-                }
+                executeAction(selectedCommand);
             };
 
             function executeAction(selectedCommand) {
@@ -186,7 +164,26 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
             $scope.keys.push({
                 code: [13 /*enter*/ , 39 /*right*/ ],
                 action: function() {
-                    $scope.open($scope.selectedCommand);
+
+                    var selectedCommand = $scope.selectedCommand;
+
+                    if (selectedCommand.commands && selectedCommand.commands.length > 0) {
+                        // not a leaf node, switch to level 1
+                        if ($scope.level == 0)
+                            $scope.commands1 = selectedCommand.commands;
+                        else if ($scope.level == 1)
+                            $scope.commands2 = selectedCommand.commands;
+
+                        $scope.cmdArray.push(selectedCommand.commands);
+
+                        $scope.level++;
+                        $scope.focusIndex = 0;
+
+                        $scope.selectedCommand = selectedCommand.commands[0];
+
+                    } else if (selectedCommand.action_type) {
+                        $scope.open($scope.selectedCommand);
+                    }
                 }
             });
 
@@ -225,19 +222,17 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
             $scope.keys.push({
                 code: [37],
                 action: function() {
-                    if ($scope.level == 0) {
 
-                    } else if ($scope.level == 1) {
+                    if ($scope.level >= 1) {
                         // decrement level
                         $scope.level--;
-
-
-                    } else if ($scope.level == 2) {
-
-                        $scope.level--;
+                        $scope.cmdArray.pop();
                     }
-
                     $scope.focusIndex = 0;
+
+                    var commands = $scope.cmdArray[$scope.level];
+
+                    $scope.selectedCommand = commands[$scope.focusIndex];
 
                 }
             });

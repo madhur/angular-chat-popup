@@ -269,7 +269,7 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
 
                 var firstPopup;
                 
-                $http.get('/partials/popupmenu.html', {
+                $http.get('partials/popupmenu.html', {
                     cache: $templateCache
                 }).success(function(data) {
                     firstPopup = data;

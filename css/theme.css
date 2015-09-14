@@ -1,0 +1,91 @@
+.type_cmds
+	{
+		list-style-type: none;
+		margin: 0;
+		padding:0;
+	}
+
+	.type_cmds li
+	{
+		display:table;
+	}
+
+	li.tab_complete_ui_item {
+    border: 0;
+  
+    background: 0 0;
+    padding: 3px 10px 2px;
+    font-size: 12px;
+    border-bottom: 1px solid #fff;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    border-bottom-style: dotted;
+    border-width: 1px;
+    border-color: #808080;
+    height:40px;
+
+    width:100%;
+
+}
+
+li.header-command
+{
+border: 0;
+  
+    background: 0 0;
+    padding: 3px 10px 2px;
+    font-size: 12px;
+    
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    height:40px;
+    padding-top:15px;
+    color:lightgray;
+
+}
+
+li.active {
+   background-color:#F2F2F2;
+}
+
+.cmdname
+{
+	font-weight: 900;
+}
+
+li .cmd-left-td {
+    display: table-cell;
+    white-space: nowrap;
+    padding-right: 15px;
+    padding-top:10px;
+    color:#2b4049;
+}
+
+li .cmd-right-td {
+    display: table-cell;
+    text-align: right;
+    padding-right: 15px;
+     padding-top:10px;
+     color:darkgray;
+}
+
+ul.type_cmds .cmddesc {
+    font-weight: 300;
+}
+
+#popupholder
+{
+	    border-style: solid;
+    border-width: 1px;
+    border-color: #A9A9A9;
+    outline: 0px solid transparent;
+    position: absolute;
+    bottom: 25px;
+    width:100%;
+    background-color: white;
+
+}

@@ -4,12 +4,11 @@ A simple angular directive to add a popup menu to the `input` element or a `cont
 
 The UI is inspired from [Slack](https://slack.com/) and [Flock](http://www.flock.co/)
 
-[!](screen.png)
+###[Demo](http://madhur.co.in/angular-chat-popup)
 
 ##How does this work
 
 Upon `/` character, a popup menu is rendered. Its template is fetched from `partials/popupmenu.html` file.
-
 
 
 ##How do I configure the popup
@@ -26,21 +25,6 @@ The input data is fetched from the `appsettings.js` file. Currently 3 levels are
                 commands:[]
 
             },
-
-            {
-                id: 1,
-                text: "Upload image",
-                desc: "Allows to select an image to upload",
-                action_type: "upload_image"
-            },
-
-            {
-                id: 2,
-                text: "Redirect",
-                desc: "Redirect user to a different channel",
-                action_type: "redirect_chat"
-            },
-
 
             {
                 id: 3,
@@ -67,27 +51,6 @@ The input data is fetched from the `appsettings.js` file. Currently 3 levels are
 		                text: "Facebook",
 		                desc: "Share Request",
 		                action_type: "share_facebook",
-            		},
-
-            		{
-		                id: 8,
-		                text: "Facebook Messenger",
-		                desc: "Share Request",
-		                action_type: "share_messenger",
-            		},
-
-            		{
-		                id: 9,
-		                text: "Twitter",
-		                desc: "Share Request",
-		                action_type: "share_twitter",
-            		},
-
-            		{
-		                id: 10,
-		                text: "Google Plus",
-		                desc: "Share Request",
-		                action_type: "share_gplus",
             		}
 
                 ]
@@ -101,6 +64,38 @@ The input data is fetched from the `appsettings.js` file. Currently 3 levels are
             },
 
         ];
+```
+
+##How do I configure the action on each option
+
+Each leaf node has a corresponding property `action_type`. The function `executeAction(selectedCommand)` is called upon press on enter key or right arrow key on a highlighted node. Currently, the function is a dummy placeholder for you to define your own action types.
+
+```javascript
+function executeAction(selectedCommand) {
+                if (selectedCommand.action_type == 'share_macro') {
+                    // do name replacement and company
+                    destroyPopup(selectedCommand.text);
+                } else {
+                    if (selectedCommand.action_type == 'rate_card') {
+
+                    } else if (selectedCommand.action_type == 'upload_image') {
+
+                    } else if (selectedCommand.action_type == 'address_card') {
+
+                    } else if (selectedCommand.action_type == 'share_whatsapp') {
+
+                    } else if (selectedCommand.action_type == 'share_messenger') {
+
+                    } else if (selectedCommand.action_type == 'share_facebook') {
+
+                    } else if (selectedCommand.action_type == 'share_twitter') {
+
+                    } else if (selectedCommand.action_type == 'share_gplus') {
+
+                    }
+                    destroyPopup(null);
+                }
+            }
 ```
 
 ##Next Steps

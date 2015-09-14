@@ -4,7 +4,7 @@ chatApp.factory('AppSettings', function() {
 
         [{
                 id: 0,
-                text: "Macros",
+                text: "Option 1  (with suboptions)",
                 desc: "Includes greetings, apologies, goodbyes",
                 commands:[]
 
@@ -12,14 +12,14 @@ chatApp.factory('AppSettings', function() {
 
             {
                 id: 1,
-                text: "Upload image",
+                text: "Option 2",
                 desc: "Allows to select an image to upload",
                 action_type: "upload_image"
             },
 
             {
                 id: 2,
-                text: "Redirect",
+                text: "Option 3",
                 desc: "Redirect user to a different channel",
                 action_type: "redirect_chat"
             },
@@ -27,14 +27,14 @@ chatApp.factory('AppSettings', function() {
 
             {
                 id: 3,
-                text: "Rate card",
+                text: "Option 4",
                 desc: "Send a rate card to the user",
                 action_type: "rate_card"
             },
 
             {
                 id: 4,
-                text: "Share card",
+                text: "Option 5 (with suboptions)",
                 desc: "Send a share card to the user",
                 commands: [
 
@@ -78,7 +78,7 @@ chatApp.factory('AppSettings', function() {
 
             {
                 id: 5,
-                text: "Address card",
+                text: "Option 6",
                 desc: "Send a address card to the user",
                 action_type: "address_card"
             },

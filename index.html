@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link type="text/stylesheet" rel="stylesheet" href="css/bootstrap.min.css" />
     <link type="text/stylesheet" rel="stylesheet" href="css/bootstrap-theme.min.css" />
+    <link type="text/stylesheet" rel="stylesheet" href="css/style.css" />
     <style>
 	.type_cmds
 	{
@@ -99,31 +100,35 @@ ul.type_cmds .cmddesc {
 }
 
     </style>
+
+    <title>Angular chat popup</title>
 </head>
 
 <body ng-controller="chatController">
     <div class="container">
-        <div class="row" style="height:600px">
+        <div class="row">
             <div class="col-md-12">
-            	<!-- <pre>Selectedcommand: {{selectedCommand}}</pre> -->
-            	<pre>focusIndex: {{focusIndex}}</pre>
-            	<pre>Level: {{level}}</pre>
-				<pre>action_type: {{selectedCommand.action_type}}</pre>
-            	<span id="exec"></span>
+            	<h1>Angular chat popup</h1>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12" style="height:400px">
+
+            <!-- <pre>Selectedcommand: {{selectedCommand}}</pre> -->
+              <!--   <pre>focusIndex: {{focusIndex}}</pre>
+                <pre>Level: {{level}}</pre>
+                <pre>action_type: {{selectedCommand.action_type}}</pre> -->
+                <span id="exec"></span>
             	
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" >
             <div class="col-md-12">
 
 					
-                <div contenteditable="true" style="border-width:1px; border-style: solid; width:100%" id="msgdiv" keyboard-shortcut>
+                <div contenteditable="true" placeholder="Type / for more options" style="border-width:1px; border-style: solid; width:100%" id="msgdiv" keyboard-shortcut>
                 </div>
             </div>
         </div>
@@ -133,9 +138,6 @@ ul.type_cmds .cmddesc {
      <script type="text/javascript" src="lib/jquery.min.js"></script>
     <script type="text/javascript" src="lib/angular.min.js"></script>
 
-    <!-- <script type="text/javascript" src="lib/angular-animate.min.js"></script>
-<script type="text/javascript" src="lib/angular-route.min.js"></script>
-<script type="text/javascript" src="lib/angular-sanitize.js"></script> -->
     <script type="text/javascript" src="lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
       <script type="text/javascript" src="js/appsettings.js"></script>

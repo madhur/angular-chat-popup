@@ -1,0 +1,32 @@
+<div class="shortcut-menu">
+    <ul class="type_cmds" ng-show="level==0">
+    	<li class="header-command">
+    	PRESS 'ENTER' TO ACT ON ANY COMMAND
+    	</li>
+        <li class="tab_complete_ui_item" ng-repeat="command in commands" ng-class="{'active': $index == focusIndex }">
+				<div class="cmd-left-td"><span class="cmdname">/{{command.text}}</span></div>
+            		<div class="cmd-right-td"><span class="cmddesc"><span class="cmdtype"></span> {{command.desc}}</span>
+            </div>
+        </li>
+    </ul>
+    <ul class="type_cmds" ng-show="level==1">
+    <li class="header-command">
+    	PRESS 'ENTER' TO ACT ON ANY COMMAND
+    	</li>
+        <li class="tab_complete_ui_item" ng-repeat="command in commands1" ng-class="{'active': $index == focusIndex }">
+				<div class="cmd-left-td"><span class="cmdname">/{{command.text}}</span></div>
+            		<div class="cmd-right-td"><span class="cmddesc"><span class="cmdtype"></span> {{command.desc}}</span>
+            </div>
+        </li>
+    </ul>
+    <ul class="type_cmds" ng-show="level==2">
+    <li class="header-command">
+    	PRESS 'ENTER' TO ACT ON ANY COMMAND
+    	</li>
+        <li class="tab_complete_ui_item" ng-repeat="command in commands2" ng-class="{'active': $index == focusIndex }">
+				<div class="cmd-left-td"><span class="cmdname">/{{command.text}}</span></div>
+            		<div class="cmd-right-td"><span class="cmddesc"><span class="cmdtype"></span> {{command.desc}}</span>
+            </div>
+        </li>
+    </ul>
+</div>

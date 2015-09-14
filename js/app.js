@@ -267,40 +267,48 @@ chatApp.directive('keyboardShortcut', function($http, $log, $templateCache, $com
 
             function load() {
 
-                var firstPopup = $templateCache.get('popupmenu.html');
+                var firstPopup;
+                
+                $http.get('/partials/popupmenu.html', {
+                    cache: $templateCache
+                }).success(function(data) {
+                    firstPopup = data;
 
-                $scope.commands = AppSettings.popupMenu;
+                    $scope.commands = AppSettings.popupMenu;
 
-                // First command is defualt selected command
-                $scope.selectedCommand = $scope.commands[0];
+                    // First command is defualt selected command
+                    $scope.selectedCommand = $scope.commands[0];
 
-                $scope.cmdArray = [$scope.commands]
+                    $scope.cmdArray = [$scope.commands]
 
-                var linkFn = $compile(firstPopup);
-                var content = linkFn($scope);
-                $log.debug(content);
+                    var linkFn = $compile(firstPopup);
+                    var content = linkFn($scope);
+                    $log.debug(content);
 
-                $timeout(function() {
-                    $('#popupholder').html(content);
+                    $timeout(function() {
+                        $('#popupholder').html(content);
 
-                    $('#popupholder').on('keydown', function(event) {
+                        $('#popupholder').on('keydown', function(event) {
 
-                        var code = event.keyCode
+                            var code = event.keyCode
 
-                        $scope.keys.forEach(function(o) {
-                            if ($.inArray(code, o.code) == -1) {
-                                return;
-                            }
+                            $scope.keys.forEach(function(o) {
+                                if ($.inArray(code, o.code) == -1) {
+                                    return;
+                                }
 
-                            event.preventDefault();
-                            o.action();
-                            $scope.$apply();
+                                event.preventDefault();
+                                o.action();
+                                $scope.$apply();
+                            });
                         });
-                    });
 
-                    $('#popupholder').show();
-                    $('#popupholder').focus();
+                        $('#popupholder').show();
+                        $('#popupholder').focus();
 
+                    }).error(function(data) {
+                        $log.error("Could not load tempalte");
+                    })
 
                 });
 
